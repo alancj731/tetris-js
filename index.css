@@ -1,0 +1,69 @@
+.App-header {
+  background-color: #3a5996;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.container {
+  margin-top: 40px;
+  width: 668px;
+  height: 768px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+.title {
+  margin-top: 30px;
+  color: rgb(219, 80, 157);
+  font-size: 32px;
+}
+
+.board {
+  background-color: slategray;
+  margin-top: 10px;
+  margin-left: 10px;
+  width: 251px;
+  height: 551px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.start-button {
+  color: black;
+  background-color: #0ea5e9;
+  height: 55px;
+  width: 178px;
+  border-radius: 0.5rem;
+  margin-top: 64px;
+  font-size: 1.5rem;
+}
+
+.blank {
+  background-color: slateblue;
+  width: 24px;
+  height: 24px;
+  margin-left: 1px;
+}
+
+.tetris {
+  background-color: yellow;
+  width: 24px;
+  height: 24px;
+  margin-left: 1px;
+}
+
+.taken {
+  background-color: black;
+  width: 24px;
+  height: 24px;
+  margin-left: 1px;
+}
+
+.bottom {
+  display: none;
+}
