@@ -5,8 +5,8 @@ const numberOfDivs = 210;
 const COLS = 10;
 const ROWS = 21;
 const STARTPOS = 4;
+const INTERVAL = 700;
 let timerId = null;
-let freezeTimer = null;
 let lock = false;
 
 const lTetr = [
@@ -82,8 +82,6 @@ let Matrix = Array.from({ length: numberOfDivs }, (_, index) => {
   return newDiv;
 });
 
-// console.log(Matrix);
-
 // add tetris to the board
 Matrix.forEach((div) => {
   playBoard.appendChild(div);
@@ -105,7 +103,7 @@ const handleStart = () => {
 const setTimer = () => {
   timerId = setInterval(() => {
     handleInterval();
-  }, 400);
+  }, INTERVAL);
   return timerId;
 };
 
@@ -159,10 +157,6 @@ const checkTaken = () => {
       console.log(statusMatrix[currentPos + pos + COLS]);
     }
     return (
-      // Matrix[currentPos + pos].classList.contains("taken") ||
-      // Matrix[currentPos + pos + COLS].classList.contains("bottom") ||
-      // Matrix[currentPos + pos + COLS].classList.contains("taken")
-
       statusMatrix[currentPos + pos] === "taken" ||
       statusMatrix[currentPos + pos + COLS] === "bottom" ||
       statusMatrix[currentPos + pos + COLS] === "taken"
@@ -198,26 +192,15 @@ document.addEventListener("keydown", function (event) {
   if (gameStatus !== "started") {
     return;
   }
-  // don't response to key press if the last key press is within 100ms
-  // if (freezeTimer) {
-  //   return;
-  // } else {
-  // freeze 100 ms
-  // freezeTimer = setTimeout(() => {
-  //   freezeTimer = null;
-  // }, 300);
-  // }
 
   switch (event.key) {
     case "a":
     case "A":
       handelLeft();
-      // Add your action for when 'A' is pressed
       break;
     case "l":
     case "L":
       handelRight();
-      // Add your action for when 'S' is pressed
       break;
     case "j":
     case "J":
@@ -241,7 +224,6 @@ const handelLeft = () => {
   const noMove = currentTetris[currentRotation].some((pos) => {
     return (
       (currentPos + pos) % COLS === 0 ||
-      // Matrix[currentPos + pos - 1].classList.contains("taken")
       statusMatrix[currentPos + pos - 1] === "taken"
     );
   });
@@ -259,7 +241,6 @@ const handelRight = () => {
   const noMove = currentTetris[currentRotation].some((pos) => {
     return (
       (currentPos + pos) % COLS === COLS - 1 ||
-      // Matrix[currentPos + pos + 1].classList.contains("taken")
       statusMatrix[currentPos + pos + 1] === "taken"
     );
   });
@@ -276,10 +257,7 @@ const handelRight = () => {
 const handelDown = () => {
   const noMove = currentTetris[currentRotation].some((pos) => {
     return (
-      // Matrix[currentPos + 1 * COLS].classList.contains("taken") ||
-      // Matrix[currentPos + 1 * COLS].classList.contains("bottom")
       statusMatrix[currentPos + pos + 1 * COLS] === "taken" ||
-      // (currentPos + pos + 1 * COLS > (ROWS - 2) * COLS)
       statusMatrix[currentPos + pos + 1 * COLS] === "bottom"
     );
   });
@@ -300,7 +278,6 @@ const handelRotate = () => {
       (currentPos + pos) % COLS === COLS - 1 || (currentPos + pos) % COLS === 0
     );
   });
-  // const noMove = false;
 
   if (noMove) {
     return;
