@@ -1,4 +1,13 @@
 const playBoard = document.getElementById("gameboard");
+const startButton = document.getElementById("start");
+
+startButton.addEventListener("keydown", function (event) {
+  // Check if the pressed key is Space or Enter
+  if (event.code === "Space" || event.code === "Enter") {
+    // Prevent the default action to stop triggering a click event
+    event.preventDefault();
+  }
+});
 
 const numberOfDivs = 210;
 
@@ -96,6 +105,7 @@ const handleStart = () => {
   if (currentStatus === "started") {
     return clearTimer();
   } else {
+    lock = false;
     return setTimer();
   }
 };
@@ -108,8 +118,10 @@ const setTimer = () => {
 };
 
 const handleInterval = () => {
-  if (lock) return;
-  else lock = true;
+  if (lock) {
+    console.log("locked");
+    return;
+  } else lock = true;
   let gameOver;
   // remove the current tetris
   unDraw();
@@ -123,11 +135,11 @@ const handleInterval = () => {
     // check if the game is over
     gameOver = handleTaken();
     if (gameOver) {
-      handelGameOver();
+      handleGameOver();
       lock = false;
       return;
     }
-    handelRemove();
+    handleRemove();
     // get a new tetris
     currentTetris = getNewTetris();
     currentPos = tetrisStartPos;
@@ -136,7 +148,7 @@ const handleInterval = () => {
   }
 };
 
-const handelGameOver = () => {
+const handleGameOver = () => {
   gameStatus = "gameover";
   document.getElementById("start").innerHTML = "Game Over!";
   timerId = clearTimer();
@@ -153,9 +165,6 @@ const handelGameOver = () => {
 
 const checkTaken = () => {
   return currentTetris[currentRotation].some((pos) => {
-    if (currentPos + pos + COLS >= 200) {
-      console.log(statusMatrix[currentPos + pos + COLS]);
-    }
     return (
       statusMatrix[currentPos + pos] === "taken" ||
       statusMatrix[currentPos + pos + COLS] === "bottom" ||
@@ -181,14 +190,15 @@ const clearTimer = () => {
   return null;
 };
 
-document.getElementById("start").addEventListener("click", () => {
+startButton.addEventListener("click", () => {
   timerId = handleStart();
 });
 
-// handel key control
+// handle key control
 document.addEventListener("keydown", function (event) {
   if (lock) return;
   else lock = true;
+  
   if (gameStatus !== "started") {
     return;
   }
@@ -196,31 +206,29 @@ document.addEventListener("keydown", function (event) {
   switch (event.key) {
     case "a":
     case "A":
-      handelLeft();
+      handleLeft();
       break;
     case "l":
     case "L":
-      handelRight();
+      handleRight();
       break;
     case "j":
     case "J":
-      handelDown();
+      handleDown();
       break;
     case "f":
     case "F":
-      handelRotate();
-
+      handleRotate();
       break;
-    // Add any other keys you're interested in
     default:
       // Code to run if none of the specific keys are pressed
       break;
   }
-  handelRemove();
+  handleRemove();
   lock = false;
 });
 
-const handelLeft = () => {
+const handleLeft = () => {
   const noMove = currentTetris[currentRotation].some((pos) => {
     return (
       (currentPos + pos) % COLS === 0 ||
@@ -237,7 +245,7 @@ const handelLeft = () => {
   }
 };
 
-const handelRight = () => {
+const handleRight = () => {
   const noMove = currentTetris[currentRotation].some((pos) => {
     return (
       (currentPos + pos) % COLS === COLS - 1 ||
@@ -254,7 +262,7 @@ const handelRight = () => {
   }
 };
 
-const handelDown = () => {
+const handleDown = () => {
   const noMove = currentTetris[currentRotation].some((pos) => {
     return (
       statusMatrix[currentPos + pos + 1 * COLS] === "taken" ||
@@ -271,7 +279,7 @@ const handelDown = () => {
   }
 };
 
-const handelRotate = () => {
+const handleRotate = () => {
   const newRotation = (currentRotation + 1) % currentTetris.length;
   const noMove = currentTetris[newRotation].some((pos) => {
     return (
@@ -304,7 +312,7 @@ const Draw = () => {
   });
 };
 
-const handelRemove = () => {
+const handleRemove = () => {
   let i = ROWS - 1;
   while (i >= 0) {
     // let rowFilled = Matrix.slice(i * COLS, i * COLS + COLS).every((div) => {
