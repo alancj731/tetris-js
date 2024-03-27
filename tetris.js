@@ -105,7 +105,6 @@ const handleStart = () => {
   if (currentStatus === "started") {
     return clearTimer();
   } else {
-    lock = false;
     return setTimer();
   }
 };
@@ -160,6 +159,8 @@ const handleGameOver = () => {
       div.classList.add("blank");
     });
     document.getElementById("start").innerHTML = "Start";
+    gameStatus = "idle";
+    lock = false;
   }, 4000);
 };
 
@@ -191,6 +192,9 @@ const clearTimer = () => {
 };
 
 startButton.addEventListener("click", () => {
+  if (gameStatus === "gameover") {
+    return;
+  }
   timerId = handleStart();
 });
 
@@ -198,7 +202,7 @@ startButton.addEventListener("click", () => {
 document.addEventListener("keydown", function (event) {
   if (lock) return;
   else lock = true;
-  
+
   if (gameStatus !== "started") {
     return;
   }
